@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    active: dev
+appversion: @project.artifactId@-@project.version@.jar

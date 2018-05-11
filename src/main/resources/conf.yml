@@ -1,0 +1,12 @@
+reader:
+  type: directory
+  traffic: 100
+  directory:
+    path: /home/pasu/cdn
+
+cache-manager:
+  enable: true
+  type: in-memory
+  clear-strategy:
+    type: timer
+    timer: 5000
