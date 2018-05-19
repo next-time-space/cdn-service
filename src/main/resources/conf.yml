@@ -1,12 +1,32 @@
 reader:
-  type: directory
-  traffic: 100
-  directory:
-    path: /home/pasu/cdn
-
-cache-manager:
-  enable: true
-  type: in-memory
-  clear-strategy:
-    type: timer
-    timer: 5000
+  - type: directory
+    alias: cdn1
+    traffic: 60
+    directory:
+      path: /home/pasu/cdn
+    response:
+      header: "app:beta|Cache-Control:max-age=3600"
+    cache-manager:
+      enable: true
+      type: in-memory
+      clear-strategy:
+        type: timer
+        tic: 25000
+  
+  - type: directory
+    alias: cdn2
+    traffic: 410
+    directory:
+      path: /home/pasu/cdn1
+    response:
+      header: "app:prod|Cache-Control:max-age=3600"
+    cache-manager:
+      enable: true
+      type: in-memory
+      clear-strategy:
+        type: timer
+        tic: 25000   
+  - type: google-cloud-storage
+    traffic: 100
+    directory:
+      path: /home/pasu/cdn
