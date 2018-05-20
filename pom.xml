@@ -92,5 +92,6 @@
       <artifactId>quartz-jobs</artifactId>
       <version>2.2.1</version>
   </dependency>  
+
 	</dependencies>
 </project>

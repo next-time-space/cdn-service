@@ -53,6 +53,20 @@ public class UtilityComponent {
 	  confProperties = yaml.getObject();
 	}
 	
+	public String readerKeyByAlias(String alias) {
+		int typeArrayIndex = 0;
+		String readerKey = "";
+		String aliasFromList = "";
+		while((aliasFromList = confProperties.getProperty(String.format("repo[%s].alias", typeArrayIndex))) != null) {
+			if(aliasFromList.equals(alias)) {
+				readerKey = String.format("repo[%s]", typeArrayIndex);
+				break;
+			}
+			typeArrayIndex++;
+		}
+		return readerKey;
+	}
+	
 	public String getAppNameVersion() {
 		return applicationProperties.getAppVersion();
 	}

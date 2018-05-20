@@ -1,22 +1,15 @@
 package com.nexttimespace.cdnservice.reader;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.stereotype.Component;
@@ -51,8 +44,8 @@ public class DirectoryReader extends MasterReader {
 			appConf = utilityComponent.getConfProperties();
 			String type = "";
 			int typeArrayIndex = 0;
-			while((type = appConf.getProperty(String.format("reader[%s].type", typeArrayIndex))) != null) {
-				String readerKey = String.format("reader[%s]", typeArrayIndex);
+			while((type = appConf.getProperty(String.format("repo[%s].type", typeArrayIndex))) != null) {
+				String readerKey = String.format("repo[%s]", typeArrayIndex);
 				String alias = appConf.getProperty(readerKey + ".alias");
 				if(type.equals("directory")) {
 					DirectoryReaderObjects directoryReaderObjects = new DirectoryReaderObjects();

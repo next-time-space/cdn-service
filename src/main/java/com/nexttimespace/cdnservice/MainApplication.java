@@ -6,9 +6,10 @@ import java.sql.SQLException;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 
-@SpringBootApplication 
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 @EnableCaching
 public class MainApplication {
 	public static void main(String[] args) throws URISyntaxException, ClassNotFoundException, SQLException, IOException {

@@ -1,6 +1,17 @@
-reader:
+server:
+  ssl-config:
+    port: 8443
+    key-store: /home/pasu/ntscerts/server-keystore.jks
+    key-store-password: secret
+    key-alias: secure-server
+    trust-store: /home/pasu/ntscerts/server-truststore.jks
+    trust-store-password: secret
+  http:
+    port: 8080
+repo:
   - type: directory
     alias: cdn1
+    allow-publish: true
     traffic: 60
     directory:
       path: /home/pasu/cdn

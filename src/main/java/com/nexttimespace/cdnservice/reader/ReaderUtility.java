@@ -38,7 +38,7 @@ public class ReaderUtility {
 		Properties confProperties = utilityComponent.getConfProperties();
 		int typeArrayIndex = 0;
 		String type = null;
-		while((type = confProperties.getProperty(String.format("reader[%s].type", typeArrayIndex))) != null) {
+		while((type = confProperties.getProperty(String.format("repo[%s].type", typeArrayIndex))) != null) {
 			if(type.equals("directory")) {
 				directoryReader.setInit();
 			}
