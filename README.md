@@ -35,7 +35,17 @@ Configure ssl configuration in conf.yml provide file path and passphrase.
 
 # Publishing file
 
-curl -F file=@/home/pasu/loop http://localhost:8080/publish/cdn1?path=newfile/loop.xml
+Consider my folder cdn has the following structure
+
+```
+/home/next-time-space/cdn/jquery/1.12.4/jquery.min.js
+```
+Meta | Value
+------------ | -------------
+URL | https://localhost:8443/publish?path=/jquery/1.12.4/jquery.min.js
+Method | POST
+Form | 
+file | `file path to upload`
 
 
 
