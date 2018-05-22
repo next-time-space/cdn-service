@@ -5,17 +5,7 @@ appversion: @project.artifactId@-@project.version@.jar
 ---
 spring:
   profiles: envy
-server:
-  port: 8443
-  security:
-    require-ssl: true
-  ssl:
-    key-store-type: PKCS12
-    key-store: file:certificate.pfx
-    key-store-password: changeit
-    key-password: changeit
-    client-auth: want
-    
+
 ---
 spring:
   profiles: local

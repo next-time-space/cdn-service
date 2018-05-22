@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nexttimespace.cdnservice.publisher.MasterPublisher;
+import com.nexttimespace.cdnservice.reader.DirectoryReader;
 import com.nexttimespace.cdnservice.reader.MasterReader;
 import com.nexttimespace.cdnservice.reader.ReaderUtility;
 import com.nexttimespace.cdnservice.reader.TrafficRouter;
@@ -65,25 +67,35 @@ public class ServeContentController {
 	
 	@Autowired
 	UtilityComponent utilityComponent;
+	
+	private Logger logger = Logger.getLogger(ServeContentController.class);
 
 	@RequestMapping(value = "/publish/{alias}", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> publishToDirectory(@PathVariable String alias, @RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) {
+		ResponseEntity<String> responseEntity = null;
 		try {
 			if(request.getServerPort() == httpsPort) {
 				Part filePart = request.getPart("file");
-				if(masterPublisher.publish(filePart.getInputStream(), alias, path)) {
-					return new ResponseEntity<String>("Published successfully", HttpStatus.OK);
+				if(filePart != null && path != null && !path.isEmpty()) {
+					if(masterPublisher.publish(filePart.getInputStream(), alias, path)) {
+						responseEntity = new ResponseEntity<String>("Published successfully", HttpStatus.OK);
+					} else {
+						responseEntity = new ResponseEntity<String>("Publish disabled", HttpStatus.OK);
+					}
 				} else {
-					return new ResponseEntity<String>("Publish disabled", HttpStatus.OK);
+					responseEntity = new ResponseEntity<String>("file or path request attribute missing", HttpStatus.BAD_REQUEST);
 				}
+				
 			} else {
-				return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+				responseEntity = new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 			}
 			
 		} catch (Exception e) {
-			return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Error on publish: ", e);
+			responseEntity = new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		return responseEntity;
 	}
 	
 	@RequestMapping(value = "/**", method=RequestMethod.GET)
@@ -107,7 +119,7 @@ public class ServeContentController {
 				return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error on servecontent: ", e);
 			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 		}
 	}

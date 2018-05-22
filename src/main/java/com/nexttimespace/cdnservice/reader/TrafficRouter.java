@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.stereotype.Component;
 
 import com.nexttimespace.cdnservice.reader.data.ReaderObject;
@@ -20,11 +19,7 @@ import com.nexttimespace.cdnservice.utility.UtilityComponent;
 public class TrafficRouter {
 	
 	AtomicInteger totalHit = new AtomicInteger(0);
-	
-	private final CounterService counterService;
-	public TrafficRouter(CounterService counterService) {
-        this.counterService = counterService;
-    }
+
 	Map<String, AtomicInteger> readerAndCounter = new LinkedHashMap<>();
 	Map<String, Integer> readerAndPercent = new LinkedHashMap<>();
 
@@ -59,14 +54,12 @@ public class TrafficRouter {
 		if(lifeLeftReaders.size() == 1) {
 			String reader = lifeLeftReaders.get(0);
 			readerAndCounter.get(reader).incrementAndGet();
-			counterService.increment("counter.reader." + reader);
 			return reader;
 		} else {
 			int totalReaders = lifeLeftReaders.size();
 			int randomNum = ThreadLocalRandom.current().nextInt(0, totalReaders);
 			String firstSelection = lifeLeftReaders.get(randomNum);
 			if(readerAndCounter.get(firstSelection) != null) {
-				counterService.increment("counter.reader." + firstSelection);
 				readerAndCounter.get(firstSelection).incrementAndGet();
 			}
 			return firstSelection;

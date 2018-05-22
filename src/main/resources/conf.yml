@@ -26,13 +26,14 @@ repo:
   
   - type: directory
     alias: cdn2
-    traffic: 410
+    allow-publish: true
+    traffic: 40
     directory:
       path: /home/pasu/cdn1
     response:
       header: "app:prod|Cache-Control:max-age=3600"
     cache-manager:
-      enable: true
+      enable1: true
       type: in-memory
       clear-strategy:
         type: timer
