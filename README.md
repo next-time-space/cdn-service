@@ -3,6 +3,8 @@ Content Delivery Network micro service with publish option using certificate aut
 
 Download the latest release from https://github.com/next-time-space/cdn-service/releases
 
+[![Build Status](https://travis-ci.org/next-time-space/cdn-service.svg?branch=master)](https://travis-ci.org/next-time-space/cdn-service)
+
 # Benifits
 * Provides multiple CDN repos, and traffic can be controlled with properties. Like Beta environment 2% traffic and Standard environment 98%
 * Provides secure publishing option, exiting repo files can be overwritten easily using upload option
