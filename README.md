@@ -3,7 +3,8 @@ Content Delivery Network micro service with publish option using certificate aut
 
 Download the latest release from https://github.com/next-time-space/cdn-service/releases
 
-[![Build Status](https://travis-ci.org/next-time-space/cdn-service.svg?branch=master)](https://travis-ci.org/next-time-space/cdn-service)
+[![Build Status](https://travis-ci.org/next-time-space/cdn-service.svg?branch=master)](https://travis-ci.org/next-time-space/cdn-service) [![codecov](https://codecov.io/gh/next-time-space/cdn-service/branch/master/graph/badge.svg)](https://codecov.io/gh/next-time-space/cdn-service)
+
 
 # Benifits
 * Provides multiple CDN repos, and traffic can be controlled with properties. Like Beta environment 2% traffic and Standard environment 98%
