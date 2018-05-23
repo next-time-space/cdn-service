@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,31 +49,35 @@ public class MainApplication {
 		return isValid;
 	}
 	
-	public static boolean validateServer(Properties appConf) {
+	private static boolean validateServer(Properties appConf) {
 		boolean isValid = true;
-		String httpPort = appConf.get("server.http.port").toString();
-		String sslConfError = "";
-		if(!StringUtils.isNumeric(httpPort)) {
+		if(appConf != null) {
+			String httpPort = appConf.get("server.http.port").toString();
+			String sslConfError = "";
+			if(!StringUtils.isNumeric(httpPort)) {
+				isValid = false;
+				logger.error("Invalid data for server.http.port");
+			}
+			
+			if(!StringUtils.isNumeric(appConf.get("server.ssl-config.port").toString())) {
+				sslConfError = "server.ssl-config.port";
+			} else if(!(new File(appConf.get("server.ssl-config.key-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
+				sslConfError = "server.ssl-config.key-store";
+			} else if(!(new File(appConf.get("server.ssl-config.trust-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
+				sslConfError = "server.ssl-config.trust-store";
+			} else if(StringUtils.isBlank("server.ssl-config.key-store-password")) {
+				sslConfError = "server.ssl-config.key-store-password";
+			} else if(StringUtils.isBlank("server.ssl-config.trust-store-password")) {
+				sslConfError = "server.ssl-config.trust-store-password";
+			}
+			
+			if(!sslConfError.isEmpty()) {
+				logger.error("Invalid data for "+ sslConfError + ", publish will be disabled");
+			}
+		} else {
 			isValid = false;
-			logger.error("Invalid data for server.http.port");
+			logger.error("Invalid data for app.conf");
 		}
-		
-		if(!StringUtils.isNumeric(appConf.get("server.ssl-config.port").toString())) {
-			sslConfError = "server.ssl-config.port";
-		} else if(!(new File(appConf.get("server.ssl-config.key-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
-			sslConfError = "server.ssl-config.key-store";
-		} else if(!(new File(appConf.get("server.ssl-config.trust-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
-			sslConfError = "server.ssl-config.trust-store";
-		} else if(StringUtils.isBlank("server.ssl-config.key-store-password")) {
-			sslConfError = "server.ssl-config.key-store-password";
-		} else if(StringUtils.isBlank("server.ssl-config.trust-store-password")) {
-			sslConfError = "server.ssl-config.trust-store-password";
-		}
-		
-		if(!sslConfError.isEmpty()) {
-			logger.error("Invalid data for "+ sslConfError + ", publish will be disabled");
-		}
-		
 		return isValid;
 	}
 	public static boolean validateRepo(Properties appConf) {
@@ -161,7 +163,7 @@ public class MainApplication {
 	
 	private static boolean validateResponseHeader(String header) {
 		boolean isValid = true;
-		if(header != null) {
+		if(header != null && !header.isEmpty()) {
 			String[] mainString = header.split("\\|");
 			if(mainString.length > 0) {
 				for(String headerString : mainString) {

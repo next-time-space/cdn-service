@@ -15,7 +15,7 @@ import com.nexttimespace.cdnservice.utility.UtilityComponent;
 public class ApplicationConfig {
 	
 	@Autowired
-	UtilityComponent utilityComponent;
+	private UtilityComponent utilityComponent;
 
 	@Bean
 	public EmbeddedServletContainerFactory servletContainer() {

@@ -14,7 +14,6 @@
 
 package com.nexttimespace.cdnservice.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -27,17 +26,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.nexttimespace.cdnservice.publisher.MasterPublisher;
-import com.nexttimespace.cdnservice.reader.DirectoryReader;
 import com.nexttimespace.cdnservice.reader.MasterReader;
 import com.nexttimespace.cdnservice.reader.ReaderUtility;
 import com.nexttimespace.cdnservice.reader.TrafficRouter;
@@ -48,8 +43,8 @@ import com.nexttimespace.cdnservice.utility.UtilityFunctions;
 @Controller
 public class ServeContentController {
 	
-	int httpPort;
-	int httpsPort;
+	private int httpPort;
+	private int httpsPort;
 	
 	@PostConstruct
 	public void setup() {
@@ -77,14 +72,14 @@ public class ServeContentController {
 		try {
 			if(request.getServerPort() == httpsPort) {
 				Part filePart = request.getPart("file");
-				if(filePart != null && path != null && !path.isEmpty()) {
+				if(filePart != null && path != null && !path.isEmpty() && alias != null && !alias.isEmpty()) {
 					if(masterPublisher.publish(filePart.getInputStream(), alias, path)) {
 						responseEntity = new ResponseEntity<String>("Published successfully", HttpStatus.OK);
 					} else {
 						responseEntity = new ResponseEntity<String>("Publish disabled", HttpStatus.OK);
 					}
 				} else {
-					responseEntity = new ResponseEntity<String>("file or path request attribute missing", HttpStatus.BAD_REQUEST);
+					responseEntity = new ResponseEntity<String>("file or path or alias request attribute missing", HttpStatus.BAD_REQUEST);
 				}
 				
 			} else {
@@ -93,7 +88,7 @@ public class ServeContentController {
 			
 		} catch (Exception e) {
 			logger.error("Error on publish: ", e);
-			responseEntity = new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
+			responseEntity = new ResponseEntity<String>("Publish failed due to internal error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;
 	}
