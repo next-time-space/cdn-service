@@ -29,7 +29,7 @@ public class DirectoryPublisherTest {
 		directoryPublisher.publish(IOUtils.toInputStream("testFile", Charset.defaultCharset()), "cdn1", "/test.js", "repo[0]");
 		
 		utilityComponent.getConfProperties().setProperty("repo[0].directory.path", "/tmp/");
-		directoryPublisher.publish(IOUtils.toInputStream("testFile", Charset.defaultCharset()), "cdn1", "test.js", "repo[0]");
+		directoryPublisher.publish(IOUtils.toInputStream("testFile", Charset.defaultCharset()), "cdn1", "/test.js", "repo[0]");
 		
 		
 	}
