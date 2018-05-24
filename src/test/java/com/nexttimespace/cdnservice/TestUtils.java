@@ -18,7 +18,7 @@ public class TestUtils {
 		goodProperty.setProperty("repo[0].alias", "cdn1");
 		goodProperty.setProperty("repo[0].allow-publish", "true");
 		goodProperty.setProperty("repo[0].traffic", "100");
-		goodProperty.setProperty("repo[0].directory.path", "/");
+		goodProperty.setProperty("repo[0].directory.path", "/tmp");
 		goodProperty.setProperty("repo[0].response.header", "app:beta|app1:beta1");
 		goodProperty.setProperty("repo[0].cache-manager.enable", "true");
 		goodProperty.setProperty("repo[0].cache-manager.type", "in-memory");

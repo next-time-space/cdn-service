@@ -16,7 +16,6 @@ public class DirectoryPublisher {
 
 	@Autowired
 	UtilityComponent utilityComponent;
-
 	public void publish(InputStream file, String alias, String path, String readerKey) throws IOException {
 		String directoryPath = utilityComponent.getConfProperties().getProperty(readerKey + ".directory.path");
 		directoryPath = directoryPath.endsWith("/") ? directoryPath.substring(0, directoryPath.length() - 1) : directoryPath;
