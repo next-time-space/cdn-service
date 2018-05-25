@@ -1,4 +1,4 @@
-package com.nexttimespace.cdnservice.publisher;
+package com.nexttimespace.cdnservice.reader;
 
 import java.util.ArrayList;
 import java.util.List;

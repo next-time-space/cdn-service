@@ -35,10 +35,12 @@ public abstract class MasterReader {
 	public List<String[]> getResponseHeader(String alias) {
 		ReaderObject readerObject = findReaderObject(alias);
 		List<String[]> headers = new ArrayList<>();
-		String[] responseHeader = readerObject.getResponseHeader();
-		if(responseHeader != null) {
-			for(String header : responseHeader) {
-				headers.add(header.split(":"));
+		if(readerObject != null) {
+			String[] responseHeader = readerObject.getResponseHeader();
+			if(responseHeader != null) {
+				for(String header : responseHeader) {
+					headers.add(header.split(":"));
+				}
 			}
 		}
 		return headers;
