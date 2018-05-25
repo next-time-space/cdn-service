@@ -35,10 +35,6 @@ public class DirectoryReader extends MasterReader {
 	private Properties appConf;
 	private boolean setupDone = false;
 	
-	public DirectoryReader() {
-		
-	}
-	
 	public void setInit() throws Exception {
 		if(!setupDone) {
 			appConf = utilityComponent.getConfProperties();
@@ -87,7 +83,7 @@ public class DirectoryReader extends MasterReader {
 
 	@Override
 	public void clearCache(String alias) {
-		ConcurrentHashMap<SimpleKey , String[]> caches = (ConcurrentHashMap<SimpleKey, String[]>) cacheManager.getCache("directoryContent").getNativeCache();
+		ConcurrentHashMap<SimpleKey , String[]> caches = (ConcurrentHashMap) cacheManager.getCache("directoryContent").getNativeCache();
 		caches.keySet().forEach(simpleKey -> {
 			if(simpleKey.toString().startsWith("SimpleKey ["+alias)) cacheManager.getCache("directoryContent").evict(simpleKey);
 		});
@@ -98,39 +94,4 @@ public class DirectoryReader extends MasterReader {
 	public List<ReaderObject> getReaderObject() {
 		return new ArrayList<ReaderObject>(directoryReaders.values());
 	}
-
-	@Override
-	public MasterReader findReader(String alias) {
-		
-		return null;
-	}
-
-	@Override
-	public List<String> getAllAlias() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/*
-	@Override
-	public int getTrafficPercent() {
-		return trafficPercent;
-	}
-
-	@Override
-	public String[] getResponseHeader() {
-		return responseHeader;
-	}
-
-
-	@Override
-	public String getAlias() {
-		return alias;
-	}
-	@Override
-	@CacheEvict(cacheNames="directoryContent", allEntries=true)
-	public void clearCache() {
-		logger.info("Cache directoryContent cleared for " + alias);
-	}
-*/
 }

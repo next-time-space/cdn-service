@@ -14,7 +14,6 @@ public abstract class MasterReader {
 	public abstract String[] getContent(String alias, String path)  throws Exception;
 	public abstract void clearCache(String alias);
 	public abstract List<ReaderObject> getReaderObject();
-	public abstract MasterReader findReader(String alias);
 	public List<String> getAllAlias() {
 		List<ReaderObject> readers = getReaderObject();
 		return readers.stream()
