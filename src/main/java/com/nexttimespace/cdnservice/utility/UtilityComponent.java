@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -24,9 +22,6 @@ public class UtilityComponent {
 	
 	@Autowired
 	ApplicationContext appContext;
-	
-	@Autowired
-	ApplicationProperties applicationProperties;
 	
 	@Value("${appversion}")
 	private String appVersion;
@@ -67,9 +62,6 @@ public class UtilityComponent {
 		return readerKey;
 	}
 	
-	public String getAppNameVersion() {
-		return applicationProperties.getAppVersion();
-	}
 	
 	public String getExecutablePath() throws URISyntaxException {
 		URL jarLocationUrl = UtilityComponent.class.getProtectionDomain().getCodeSource().getLocation();
@@ -82,12 +74,12 @@ public class UtilityComponent {
 		jarLocation = jarLocation.replace("jar:file:", "");
 		String projectName = "";
 		try {
-			projectName = getAppNameVersion();
+			projectName = appVersion;
 		} catch (java.lang.NullPointerException n) {
 			// Ignore
 			jarLocation = jarLocation.replace("file:\\", "");
 		}
-		if (projectName != null && !projectName.isEmpty() && !new File(jarLocation + "/" + getAppNameVersion()).exists()) {
+		if (projectName != null && !projectName.isEmpty() && !new File(jarLocation + "/" +appVersion).exists()) {
 			jarLocation = new File(UtilityComponent.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getPath().replace("\\classes", "");
 		}
 		jarLocation = jarLocation.replaceAll("\\\\", "/");

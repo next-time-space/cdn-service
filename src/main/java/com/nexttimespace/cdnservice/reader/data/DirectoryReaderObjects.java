@@ -17,9 +17,7 @@ public class DirectoryReaderObjects extends ReaderObject{
 	public void setDirectoryPath(String directoryPath) {
 		this.directoryPath = directoryPath;
 	}
-	public String getTraffic() {
-		return traffic;
-	}
+
 	public void setTraffic(String traffic) throws Exception {
 		this.traffic = traffic;
 		setTrafficPercent(traffic);
