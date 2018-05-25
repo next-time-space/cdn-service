@@ -49,7 +49,7 @@ public class TrafficRouter {
 		return reader;
 	}
 	
-	public String decideReaderBy() {
+	private String decideReaderBy() {
 		List<String> lifeLeftReaders = getLifeLeftReaders();
 		if(lifeLeftReaders.size() == 1) {
 			String reader = lifeLeftReaders.get(0);
