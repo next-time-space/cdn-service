@@ -76,11 +76,6 @@ repo:
       clear-strategy:
         type: timer
         tic: 25000   
-  - type: google-cloud-storage
-    traffic: 40
-    directory:
-      path: /home/next-time-space/cdn2
-
 ```
 # Creating keystore and truststore
 
