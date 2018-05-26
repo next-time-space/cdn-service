@@ -32,9 +32,6 @@ public class UtilityComponent {
 		return confProperties;
 	}
 
-	public void setConfProperties(Properties confProperties) {
-		this.confProperties = confProperties;
-	}
 
 	@PostConstruct
 	public void setup( ) throws URISyntaxException {
