@@ -1,10 +1,8 @@
 # cdn-service
 Content Delivery Network micro service with publish option using certificate authentication. One of the publish repository for Next Time Space Analligence - allows business users to create analytic segments and capture attentions to the segments. 
 
-Download the latest release from https://github.com/next-time-space/cdn-service/releases
 
 [![Build Status](https://travis-ci.org/next-time-space/cdn-service.svg?branch=master)](https://travis-ci.org/next-time-space/cdn-service) [![codecov](https://codecov.io/gh/next-time-space/cdn-service/branch/master/graph/badge.svg)](https://codecov.io/gh/next-time-space/cdn-service)
-
 
 # Benifits
 * Provides multiple CDN repos, and traffic can be controlled with properties. Like Beta environment 2% traffic and Standard environment 98%
@@ -77,6 +75,12 @@ repo:
         type: timer
         tic: 25000   
 ```
+# Startup
+
+* Download the latest release from https://github.com/next-time-space/cdn-service/releases
+* Create `conf.yml`, as explained above, you can leave `ssl-config` part
+* run java -jar cdn-service-0.0.1-SNAPSHOT.jar 
+
 # Creating keystore and truststore
 
 Run all these commands and create all required certificate files.
