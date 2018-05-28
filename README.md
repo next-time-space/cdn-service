@@ -79,7 +79,7 @@ repo:
 
 * Download the latest release from https://github.com/next-time-space/cdn-service/releases
 * Create `conf.yml`, as explained above, you can leave `ssl-config` part
-* run java -jar cdn-service-0.0.1-SNAPSHOT.jar 
+* run `java -jar cdn-service-0.0.1-SNAPSHOT.jar`
 
 # Creating keystore and truststore
 
