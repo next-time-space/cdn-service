@@ -100,13 +100,13 @@ keytool -genkeypair -alias client -keyalg RSA -dname "CN=Name,OU=CDN,O=Next Time
 Handshake Client and server keystore
 
 ```
-keytool -exportcert -alias secure-client -file client-public.cer -keystore client-keystore.jks -storepass secret
+keytool -exportcert -alias client -file client-public.cer -keystore client-keystore.jks -storepass secret
 keytool -importcert -keystore server-truststore.jks -alias clientcert -file client-public.cer -storepass secret
 ```
 Create final client certificate
 
 ```
-keytool -exportcert -alias secure-server -file server-public.cer -keystore server-keystore.jks -storepass secret
+keytool -exportcert -alias server -file server-public.cer -keystore server-keystore.jks -storepass secret
 keytool -importcert -keystore client-truststore.jks -alias servercert -file server-public.cer -storepass secret
 ```
 
