@@ -143,6 +143,7 @@ public class ServeContentControllerTest {
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 		Mockito.doReturn(8080).when(request).getServerPort();
 		Mockito.doReturn("pop.js").when(request).getRequestURI();
+		Mockito.doReturn("").when(request).getContextPath();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		ResponseEntity<String> readRes = contentController.serveContent(request, response);
