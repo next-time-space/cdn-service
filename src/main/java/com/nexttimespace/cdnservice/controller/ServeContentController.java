@@ -99,7 +99,7 @@ public class ServeContentController {
 	public ResponseEntity<String> serveContent(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if(request.getServerPort() == httpPort) {
-				String path = request.getRequestURI();
+				String path = request.getRequestURI().substring(request.getContextPath().length());
 				String alias = trafficManager.getReader();
 				MasterReader reader = readerUtility.findReader(alias);
 				String[] content = reader.getContent(alias, path);

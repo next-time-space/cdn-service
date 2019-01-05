@@ -1,4 +1,5 @@
 server:
+  contextPath: cdn
   ssl-config:
     port: 8443
     key-store: /home/pasu/ntscerts/server-keystore.jks

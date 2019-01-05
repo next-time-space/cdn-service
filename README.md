@@ -21,6 +21,8 @@ Create a conf.yml file and keep it next to jar file. Example conf.yml file can b
 ### yml resource and definations
 ```
 server:
+  # Optional context path to your CDN service. Context path applies to both publish and CDN URIs
+  contextPath: cdn
   # Optional: configuration, if this configuration does not exist then you won't be able to publish. 
   ssl-config:
     # SSL port for allowing secure publishing to CDN

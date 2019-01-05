@@ -42,7 +42,8 @@ public class ApplicationConfig {
 	    final String truststorePassword = utilityComponent.getConfProperties().getProperty("server.ssl-config.trust-store-password");
 	    final String portString = utilityComponent.getConfProperties().getProperty("server.ssl-config.port");
 	    final String httpPort = utilityComponent.getConfProperties().getProperty("server.http.port");
-	 
+	    String contextPath = utilityComponent.getConfProperties().getProperty("server.contextPath");
+	    
 	    TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
 	    if(StringUtils.isNotBlank(portString)) {
 	        factory.addConnectorCustomizers((TomcatConnectorCustomizer) (Connector con) -> {
@@ -63,6 +64,12 @@ public class ApplicationConfig {
 	    Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
         connector.setPort(Integer.parseInt(httpPort));
 	    factory.addAdditionalTomcatConnectors(connector);
+	    if(StringUtils.isNotBlank(contextPath)) {
+	        contextPath = contextPath.startsWith("/") ? contextPath : "/" + contextPath;
+	        factory.setContextPath(contextPath);
+	    }
+	    
+
 	    return factory;
 	}
 }
