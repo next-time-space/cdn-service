@@ -131,3 +131,22 @@ file | `file path to upload`
 
 If the file or folder structure is new, CDN will create those directory structure and upload the file as requested in `path` query parameter
 
+# Running behind nginx
+
+CDN Service endpoints has port validations for security reasons. So that you can peacefully run the application with publish enabled. If your context path configured as `cdn` then follow the recommended nginx configuration
+
+```
+upstream backend  {
+  server localhost:8080;
+}
+
+location /cdn/publish {
+  proxy_pass http://backend;
+  proxy_set_header Host $host:8443;
+}
+
+location /cdn {
+  proxy_pass http://backend;
+  proxy_set_header Host $host:8080;
+}
+```
