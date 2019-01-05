@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.nexttimespace</groupId>
 	<artifactId>cdn-service</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>Content Delivery Network Service</name>
 	<description>Micro service to manage contents and able to publish new files with certificate authentications</description>
 	<parent>
