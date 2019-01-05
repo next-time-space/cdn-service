@@ -73,18 +73,19 @@ public class MainApplication {
 				logger.error("Invalid data for server.http.port");
 			}
 			
-			if(!StringUtils.isNumeric(appConf.get("server.ssl-config.port").toString())) {
-				sslConfError = "server.ssl-config.port";
-			} else if(!(new File(appConf.get("server.ssl-config.key-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
-				sslConfError = "server.ssl-config.key-store";
-			} else if(!(new File(appConf.get("server.ssl-config.trust-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
-				sslConfError = "server.ssl-config.trust-store";
-			} else if(StringUtils.isBlank("server.ssl-config.key-store-password")) {
-				sslConfError = "server.ssl-config.key-store-password";
-			} else if(StringUtils.isBlank("server.ssl-config.trust-store-password")) {
-				sslConfError = "server.ssl-config.trust-store-password";
+			if(appConf.get("server.ssl-config.port") != null) {
+			    if(!StringUtils.isNumeric(appConf.get("server.ssl-config.port").toString())) {
+	                sslConfError = "server.ssl-config.port";
+	            } else if(!(new File(appConf.get("server.ssl-config.key-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
+	                sslConfError = "server.ssl-config.key-store";
+	            } else if(!(new File(appConf.get("server.ssl-config.trust-store").toString()).exists() && new File(appConf.get("server.ssl-config.key-store").toString()).isFile())) {
+	                sslConfError = "server.ssl-config.trust-store";
+	            } else if(StringUtils.isBlank("server.ssl-config.key-store-password")) {
+	                sslConfError = "server.ssl-config.key-store-password";
+	            } else if(StringUtils.isBlank("server.ssl-config.trust-store-password")) {
+	                sslConfError = "server.ssl-config.trust-store-password";
+	            }
 			}
-			
 			if(!sslConfError.isEmpty()) {
 				logger.error("Invalid data for "+ sslConfError + ", publish will be disabled");
 			}

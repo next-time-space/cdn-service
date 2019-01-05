@@ -15,6 +15,7 @@
 package com.nexttimespace.cdnservice.config;
 
 import org.apache.catalina.connector.Connector;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -43,19 +44,22 @@ public class ApplicationConfig {
 	    final String httpPort = utilityComponent.getConfProperties().getProperty("server.http.port");
 	 
 	    TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
-	    factory.addConnectorCustomizers((TomcatConnectorCustomizer) (Connector con) -> {
-	        con.setScheme("https");
-	        con.setSecure(true);
-	        con.setPort(Integer.parseInt(portString));
-	        Http11NioProtocol proto = (Http11NioProtocol) con.getProtocolHandler();
-	        proto.setSSLEnabled(true);
-	        proto.setClientAuth("true");
-	        proto.setKeystoreFile(keystoreFile);
-	        proto.setKeystorePass(keystorePass);
-	        proto.setTruststoreFile(truststoreFile);
-	        proto.setTruststorePass(truststorePassword);
-	        proto.setKeyAlias(keystoreAlias);
-	    });
+	    if(StringUtils.isNotBlank(portString)) {
+	        factory.addConnectorCustomizers((TomcatConnectorCustomizer) (Connector con) -> {
+	            con.setScheme("https");
+	            con.setSecure(true);
+	            con.setPort(Integer.parseInt(portString));
+	            Http11NioProtocol proto = (Http11NioProtocol) con.getProtocolHandler();
+	            proto.setSSLEnabled(true);
+	            proto.setClientAuth("true");
+	            proto.setKeystoreFile(keystoreFile);
+	            proto.setKeystorePass(keystorePass);
+	            proto.setTruststoreFile(truststoreFile);
+	            proto.setTruststorePass(truststorePassword);
+	            proto.setKeyAlias(keystoreAlias);
+	        });
+	    }
+	    
 	    Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
         connector.setPort(Integer.parseInt(httpPort));
 	    factory.addAdditionalTomcatConnectors(connector);

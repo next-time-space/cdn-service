@@ -15,6 +15,7 @@
 package com.nexttimespace.cdnservice.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +50,7 @@ public class ServeContentController {
 	@PostConstruct
 	public void setup() {
 		httpPort = Integer.parseInt(utilityComponent.getConfProperties().get("server.http.port").toString());
-		httpsPort = Integer.parseInt(utilityComponent.getConfProperties().get("server.ssl-config.port").toString());
+		httpsPort = Integer.parseInt(Objects.toString(utilityComponent.getConfProperties().get("server.ssl-config.port"), "-1"));
 	}
 	@Autowired
 	TrafficRouter trafficManager;
