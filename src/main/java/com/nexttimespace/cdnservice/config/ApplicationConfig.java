@@ -14,62 +14,74 @@
 
 package com.nexttimespace.cdnservice.config;
 
+import java.util.Optional;
+
 import org.apache.catalina.connector.Connector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.Compression;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.unit.DataSize;
 
 import com.nexttimespace.cdnservice.utility.UtilityComponent;
 
 @Configuration
-public class ApplicationConfig {
-	
-	@Autowired
-	private UtilityComponent utilityComponent;
+public class ApplicationConfig implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
 
-	@Bean
-	public EmbeddedServletContainerFactory servletContainer() {
-	     
-	    final String keystoreFile = utilityComponent.getConfProperties().getProperty("server.ssl-config.key-store");
-	    final String keystorePass = utilityComponent.getConfProperties().getProperty("server.ssl-config.key-store-password");
-	    final String keystoreAlias = utilityComponent.getConfProperties().getProperty("server.ssl-config.key-alias");
-	    final String truststoreFile = utilityComponent.getConfProperties().getProperty("server.ssl-config.trust-store");
-	    final String truststorePassword = utilityComponent.getConfProperties().getProperty("server.ssl-config.trust-store-password");
-	    final String portString = utilityComponent.getConfProperties().getProperty("server.ssl-config.port");
-	    final String httpPort = utilityComponent.getConfProperties().getProperty("server.http.port");
-	    String contextPath = utilityComponent.getConfProperties().getProperty("server.contextPath");
-	    
-	    TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
-	    if(StringUtils.isNotBlank(portString)) {
-	        factory.addConnectorCustomizers((TomcatConnectorCustomizer) (Connector con) -> {
-	            con.setScheme("https");
-	            con.setSecure(true);
-	            con.setPort(Integer.parseInt(portString));
-	            Http11NioProtocol proto = (Http11NioProtocol) con.getProtocolHandler();
-	            proto.setSSLEnabled(true);
-	            proto.setClientAuth("true");
-	            proto.setKeystoreFile(keystoreFile);
-	            proto.setKeystorePass(keystorePass);
-	            proto.setTruststoreFile(truststoreFile);
-	            proto.setTruststorePass(truststorePassword);
-	            proto.setKeyAlias(keystoreAlias);
-	        });
-	    }
-	    
-	    Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
-        connector.setPort(Integer.parseInt(httpPort));
-	    factory.addAdditionalTomcatConnectors(connector);
-	    if(StringUtils.isNotBlank(contextPath)) {
-	        contextPath = contextPath.startsWith("/") ? contextPath : "/" + contextPath;
-	        factory.setContextPath(contextPath);
-	    }
-	    
+    @Autowired
+    private UtilityComponent utilityComponent;
+    
+    @Override
+    public void customize(TomcatServletWebServerFactory factory) {
+        final String keystoreFile = utilityComponent.getConfProperties().getProperty("server.ssl-config.key-store");
+        final String keystorePass = utilityComponent.getConfProperties().getProperty("server.ssl-config.key-store-password");
+        final String keystoreAlias = utilityComponent.getConfProperties().getProperty("server.ssl-config.key-alias");
+        final String truststoreFile = utilityComponent.getConfProperties().getProperty("server.ssl-config.trust-store");
+        final String truststorePassword = utilityComponent.getConfProperties().getProperty("server.ssl-config.trust-store-password");
+        final String portString = utilityComponent.getConfProperties().getProperty("server.ssl-config.port");
+        final String httpPort = utilityComponent.getConfProperties().getProperty("server.http.port");
+        String contextPath = utilityComponent.getConfProperties().getProperty("server.contextPath");
+        
+        if (StringUtils.isNotBlank(portString)) {
+            Connector con = new Connector();
+            con.setScheme("https");
+            con.setSecure(true);
+            con.setPort(Integer.parseInt(portString));
+            Http11NioProtocol proto = (Http11NioProtocol) con.getProtocolHandler();
+            proto.setSSLEnabled(true);
+            proto.setClientAuth("true");
+            proto.setKeystoreFile(keystoreFile);
+            proto.setKeystorePass(keystorePass);
+            proto.setTruststoreFile(truststoreFile);
+            proto.setTruststorePass(truststorePassword);
+            proto.setKeyAlias(keystoreAlias);
+            factory.addAdditionalTomcatConnectors(con);
+        }
 
-	    return factory;
-	}
+        factory.setPort(Integer.parseInt(httpPort));
+        if (StringUtils.isNotBlank(contextPath)) {
+            contextPath = contextPath.startsWith("/") ? contextPath : "/" + contextPath;
+            factory.setContextPath(contextPath);
+        }
+        getCompressionParams().ifPresent(consumer -> factory.setCompression(consumer));
+    }
+
+    private Optional<Compression> getCompressionParams() {
+        if (Boolean.valueOf(utilityComponent.getConfProperties().getProperty("server.compression.enabled"))) {
+            String mimeType = utilityComponent.getConfProperties().getProperty("server.compression.mime-types");
+            String minResponseSize = utilityComponent.getConfProperties().getProperty("server.compression.min-response-size");
+            Compression com = new Compression();
+            com.setEnabled(true);
+            com.setMimeTypes(mimeType.split(","));
+            if (StringUtils.isNotBlank(minResponseSize)) {
+                com.setMinResponseSize(DataSize.ofBytes(Integer.parseInt(minResponseSize)));
+            }
+
+            return Optional.ofNullable(com);
+        }
+        return Optional.empty();
+    }
 }

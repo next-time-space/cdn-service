@@ -1,10 +1,14 @@
 server:
   contextPath: cdn
+  compression:
+    enabled: true
+    mime-types: "text/html,image/png,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json"
+    min-response-size: 1024
   ssl-config:
     port: 8443
     key-store: /home/pasu/ntscerts/server-keystore.jks
     key-store-password: secret
-    key-alias: secure-server
+    key-alias: server
     trust-store: /home/pasu/ntscerts/server-truststore.jks
     trust-store-password: secret
   http:

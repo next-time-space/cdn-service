@@ -23,6 +23,12 @@ Create a conf.yml file and keep it next to jar file. Example conf.yml file can b
 server:
   # Optional context path to your CDN service. Context path applies to both publish and CDN URIs
   contextPath: cdn
+  # Optional to enable compression on response.
+  compression:
+    enabled: true
+    mime-types: "text/html,image/png,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json"
+    # If response size is > 1024 Bytes, compression will takes in place.
+    min-response-size: 1024
   # Optional: configuration, if this configuration does not exist then you won't be able to publish. 
   ssl-config:
     # SSL port for allowing secure publishing to CDN

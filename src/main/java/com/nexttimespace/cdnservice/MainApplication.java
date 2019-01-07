@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -63,6 +63,23 @@ public class MainApplication {
 		return isValid;
 	}
 	
+	public static boolean validateCompression(Properties appConf) {
+        boolean isValid = true;
+        if(Boolean.valueOf(appConf.getProperty("server.compression.enabled"))) {
+            if(StringUtils.isBlank(appConf.getProperty("server.compression.mime-types"))) {
+                isValid = false;
+                logger.error("server.compression.mime-types missing when compression enabled.");
+            }
+            if(StringUtils.isNotBlank(appConf.getProperty("server.compression.min-response-size"))) {
+                if(!StringUtils.isNumeric(appConf.getProperty("server.compression.min-response-size"))) {
+                    isValid = false;
+                    logger.error("Invalid data for server.compression.min-response-size number or null required.");
+                }
+            }
+        }
+        return isValid;
+	}
+	
 	private static boolean validateServer(Properties appConf) {
 		boolean isValid = true;
 		if(appConf != null) {
@@ -92,6 +109,9 @@ public class MainApplication {
 		} else {
 			isValid = false;
 			logger.error("Invalid data for app.conf");
+		}
+		if(isValid) {
+		    isValid = validateCompression(appConf);
 		}
 		return isValid;
 	}

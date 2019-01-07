@@ -132,4 +132,22 @@ public class MainApplicationTest {
 		
 	}
 
+	@Test
+	public void testValidateCompression() {
+	    Properties properties = TestUtils.getClonedPropety();
+        properties.setProperty("server.compression.enabled", "true");
+        Assertions.assertFalse(MainApplication.validateCompression(properties));
+        
+        properties.setProperty("server.compression.mime-types", "text/html,image/png");
+        Assertions.assertTrue(MainApplication.validateCompression(properties));
+        
+        properties.setProperty("server.compression.min-response-size", "123");
+        Assertions.assertTrue(MainApplication.validateCompression(properties));
+        
+        properties.setProperty("server.compression.min-response-size", "abc");
+        Assertions.assertFalse(MainApplication.validateCompression(properties));
+        
+        properties.setProperty("server.compression.enabled", "false");
+        Assertions.assertTrue(MainApplication.validateCompression(properties));
+	}
 }
